@@ -23,7 +23,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _socketService.initSocketConnection();
-    final messages = _socketService.messages;
   }
 
   @override
