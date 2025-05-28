@@ -1,11 +1,10 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:flutter/foundation.dart';
 
-class SocketService extends ChangeNotifier {
+class SocketService extends StateNotifier<List<String>> {
   late IO.Socket socket;
-  final List<String> _messages = [];
 
-  List<String> get messages => List.unmodifiable(_messages);
+  SocketService() : super([]);
 
   void initSocketConnection() {
     socket = IO.io(
@@ -54,9 +53,9 @@ class SocketService extends ChangeNotifier {
   void handleMessage(dynamic data) {
     print('Received message: $data');
     try {
-      _messages.add(data['message']);
-      print('list: $_messages');
-      notifyListeners();
+      state = [...state, data['message']];
+      print('list: $state');
+
     } catch (e, stack) {
       print('Error in handleMessage: $e');
       print(stack);
@@ -71,7 +70,14 @@ class SocketService extends ChangeNotifier {
     print('Received location: $data');
   }
 
-  void dispose() {
+  void disposeSocket() {
     socket.dispose();
   }
 }
+
+final socketServiceProvider =
+    StateNotifierProvider<SocketService, List<String>>((ref) {
+  final socketService = SocketService();
+  socketService.initSocketConnection();
+  return socketService;
+});

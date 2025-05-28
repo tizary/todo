@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:todos_example/home_page.dart';
-import 'package:todos_example/services/socket_connection.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,9 +14,8 @@ void main() {
 
   runApp(GraphQLProvider(
     client: ValueNotifier(client),
-    child: ChangeNotifierProvider(
-      create: (_) => SocketService()..initSocketConnection(),
-      child: const MyApp(),
+    child: const ProviderScope(
+      child: MyApp(),
     ),
   ));
 }

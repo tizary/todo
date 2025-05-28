@@ -1,29 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:todos_example/services/socket_connection.dart';
 import 'package:todos_example/utils/get_todo.dart';
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends ConsumerState<MyHomePage> {
   final TextEditingController _addTaskController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
   String _searchText = '';
-  final SocketService _socketService = SocketService();
-
-  @override
-  void initState() {
-    super.initState();
-    _socketService.initSocketConnection();
-  }
 
   @override
   void dispose() {
@@ -32,10 +25,11 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _addTask() {
+  void _addTask(WidgetRef ref) {
+    final socketService = ref.read(socketServiceProvider.notifier);
     final message = _addTaskController.text.trim();
     if (message.isNotEmpty) {
-      _socketService.sendMessage(message);
+      socketService.sendMessage(message);
       _addTaskController.clear();
     }
   }
@@ -48,8 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final socketSer = Provider.of<SocketService>(context);
-    final messages = socketSer.messages;
+    final messages = ref.watch(socketServiceProvider);
 
     return Scaffold(
         appBar: AppBar(
@@ -84,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.blue,
                         ),
-                        onPressed: _addTask,
+                        onPressed: () => _addTask(ref),
                         child: const Text('Добавить'),
                       ),
                     ],
@@ -126,11 +119,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     const Text('Сообщения: '),
                     Expanded(
-                      child: ListView.builder(
-                          itemCount: messages.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Text(messages[index]);
-                          }),
+                      child: Consumer(builder: (context, ref, child) {
+                  
+                        return ListView.builder(
+                            itemCount: messages.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Text(messages[index]);
+                            });
+                      }),
                     ),
                   ],
                 ),
