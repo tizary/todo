@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:todos_example/models/todo_model.dart';
 import 'package:todos_example/services/socket_connection.dart';
 import 'package:todos_example/utils/get_todo.dart';
 
@@ -120,7 +121,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     const Text('Сообщения: '),
                     Expanded(
                       child: Consumer(builder: (context, ref, child) {
-                  
                         return ListView.builder(
                             itemCount: messages.length,
                             itemBuilder: (BuildContext context, int index) {
@@ -170,7 +170,8 @@ class TaskList extends StatelessWidget {
           return Center(child: Text('Ошибка: ${result.exception.toString()}'));
         }
 
-        final taskList = result.data!['todos']['data'] as List;
+        final rawList = result.data!['todos']['data'] as List;
+        final taskList = rawList.map((e) => Todo.fromJson(e)).toList();
 
         if (taskList.isEmpty) {
           return const Center(child: Text('Нет задач.'));
@@ -181,8 +182,8 @@ class TaskList extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             final task = taskList[index];
             return ListTile(
-              textColor: task['completed'] ? Colors.green : Colors.black,
-              title: Text(task['title']),
+              textColor: task.completed ? Colors.green : Colors.black,
+              title: Text(task.title),
             );
           },
         );
