@@ -1,37 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:todos_example/domain/models/cart_model.dart';
-import 'package:todos_example/data/api/store_api.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todos_example/providers/cart_provider.dart';
 
-class CartPage extends StatelessWidget {
-  final StoreApi api;
-
-  const CartPage({super.key, required this.api});
+class CartPage extends ConsumerWidget {
+  const CartPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<Cart>>(
-      future: api.getCarts(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return Center(child: Text('Ошибка: ${snapshot.error}'));
-        }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartAsync = ref.watch(cartListProvider);
 
-        final carts = snapshot.data!;
-        return ListView.builder(
-          itemCount: carts.length,
-          itemBuilder: (context, index) {
-            final cart = carts[index];
-            return ListTile(
-              title: Text('Cart ID: ${cart.id}'),
-              subtitle: Text(
-                  'User ID: ${cart.userId}, items: ${cart.products.length}'),
-            );
-          },
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(title: const Text('Корзина')),
+      body: cartAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, _) => Center(child: Text('Ошибка: $err')),
+        data: (carts) {
+          return ListView.builder(
+            itemCount: carts.length,
+            itemBuilder: (context, index) {
+              final c = carts[index];
+              return ListTile(
+                title: Text('Cart ID: ${c.id}'),
+                subtitle: Text(
+                    'User ID: ${c.userId}, items: ${c.products.length}'),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

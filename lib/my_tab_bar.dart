@@ -21,8 +21,8 @@ class _MyTabBarState extends State<MyTabBar> {
   Widget build(BuildContext context) {
     final pages = [
       const MyHomePage(title: 'new app'),
-      ProductPage(api: _api),
-      CartPage(api: _api),
+      ProductPage(),
+      CartPage(),
     ];
 
     return Scaffold(
