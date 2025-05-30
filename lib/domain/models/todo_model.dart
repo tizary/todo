@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:todos_example/models/user.dart';
+import 'package:todos_example/domain/models/user.dart';
 
 part 'todo_model.freezed.dart';
 part 'todo_model.g.dart';

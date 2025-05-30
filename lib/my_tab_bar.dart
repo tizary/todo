@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:todos_example/cart_page.dart';
-import 'package:todos_example/home_page.dart';
-import 'package:todos_example/models/store_api.dart';
-import 'package:todos_example/product_page.dart';
+import 'package:todos_example/screens/cart_page.dart';
+import 'package:todos_example/screens/home_page.dart';
+import 'package:todos_example/data/api/store_api.dart';
+import 'package:todos_example/screens/product_page.dart';
 
 class MyTabBar extends StatefulWidget {
   const MyTabBar({super.key});

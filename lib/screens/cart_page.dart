@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todos_example/models/cart_model.dart';
-import 'package:todos_example/models/store_api.dart';
+import 'package:todos_example/domain/models/cart_model.dart';
+import 'package:todos_example/data/api/store_api.dart';
 
 class CartPage extends StatelessWidget {
   final StoreApi api;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:todos_example/models/todo_model.dart';
+import 'package:todos_example/domain/models/todo_model.dart';
 import 'package:todos_example/services/socket_connection.dart';
 import 'package:todos_example/utils/get_todo.dart';
 
