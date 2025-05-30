@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:todos_example/home_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todos_example/my_tab_bar.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'GraphQl Todos'),
+      home: const MyTabBar(),
     );
   }
 }
